@@ -90,7 +90,7 @@ namespace EditorExtensions
     public class SelfDefineScriptsTemplate
     {
         //直接挂在游戏物体上，进行逻辑代码编写以 ".cs"结尾 使用partial关键字 使一个脚本分为俩个脚本 使用,分别承担不同的作用，用以避免逻辑代码被覆盖
-        public static void CreateScripts(string spawnScriptsPath, string className)
+        public static void CreateScripts(string spawnScriptsPath, string className,bool isInterface=false)
         {
             //创建脚本文件，并写入代码内容
             using (StreamWriter sw = File.CreateText(spawnScriptsPath))
@@ -110,13 +110,23 @@ namespace EditorExtensions
                 {
                     sw.WriteLine("namespace {0}", NamespaceSettings.Namespace);
                     sw.WriteLine("{");
-                    sw.WriteLine("\tpublic class {0} : MonoBehaviour", className);//或者 $"public class {className}: MonoBehaviour"
-                    sw.WriteLine("\t{");
-                    sw.WriteLine("\t\t private void Start()");
-                    sw.WriteLine("\t\t {");
-                    sw.WriteLine();
-                    sw.WriteLine("\t\t }");
-                    sw.WriteLine("\t}");
+                    if (isInterface)
+                    {
+                        sw.WriteLine("\tpublic interface {0} ", className);//或者 $"public class {className}: MonoBehaviour"
+                        sw.WriteLine("\t{");
+                        sw.WriteLine();
+                        sw.WriteLine("\t}");
+                    }
+                    else 
+                    {
+                        sw.WriteLine("\tpublic class {0} : MonoBehaviour", className);//或者 $"public class {className}: MonoBehaviour"
+                        sw.WriteLine("\t{");
+                        sw.WriteLine("\t\t private void Start()");
+                        sw.WriteLine("\t\t {");
+                        sw.WriteLine();
+                        sw.WriteLine("\t\t }");
+                        sw.WriteLine("\t}");
+                    }
                     sw.WriteLine("}");
                 }
                 else

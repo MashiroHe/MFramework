@@ -27,6 +27,7 @@ namespace EditorExtensions
         private string namspaceTxt = "";
         private string classNameTxt = "";
         private string spawnPath = "Scripts/Common";
+        private bool isInterface = false;
         private void OnEnable()
         {
             spawnPath = EditorPrefs.GetString("SpawnPath_Key", defaultValue: "Scripts/Common");
@@ -51,6 +52,14 @@ namespace EditorExtensions
             GUILayout.Label("SpawnPath:", GUILayout.Width(100));
             spawnPath = EditorGUILayout.TextField(spawnPath, GUILayout.Width(200), GUILayout.Height(20));
             GUILayout.EndHorizontal();
+           
+            GUILayout.Space(2);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Is Interface:", GUILayout.Width(100));
+            isInterface = EditorGUILayout.Toggle(isInterface, GUILayout.Width(50));
+            GUILayout.EndHorizontal();
+           
+
 
             GUILayout.Space(2);
             if (GUILayout.Button("Spawn Scripts", GUILayout.Width(330), GUILayout.Height(20)))
@@ -69,7 +78,7 @@ namespace EditorExtensions
                     }
                     if (!File.Exists(spawnScriptsPath))
                     {
-                        SelfDefineScriptsTemplate.CreateScripts(spawnScriptsPath, classNameTxt);
+                        SelfDefineScriptsTemplate.CreateScripts(spawnScriptsPath, classNameTxt, isInterface);
                         EditorPrefs.SetString("SpawnPath_Key", spawnPath);
                         Debug.Log(string.Format("Spawn {0} script success!",classNameTxt));
                         AssetDatabase.Refresh();
